@@ -1,37 +1,154 @@
-import React, {useEffect, useState} from 'react';
+import * as LucideIcons from "lucide-react";
 
-const Button = ({ htmlType="button", type="default", size, color="blue", icon=null, iconPosition="start", title="Button", children }) => {
-  const [buttonColor, setButtonColor] = useState({
-    baseColor: "",
-    hoverColor: "",
-    activeColor: "",
-  });
-
-  useEffect(() => {
-    if (type === "primary") {
-      switch (color) {
-        case "blue": setButtonColor({baseColor: "bg-blue-700", hoverColor: "hover:bg-blue-800", activeColor: "active:bg-blue-900"}); break;
-        case "red": setButtonColor({baseColor: "bg-red-700", hoverColor: "hover:bg-red-800", activeColor: "active:bg-red-900"}); break;
-        case "green": setButtonColor({baseColor: "bg-green-700", hoverColor: "hover:bg-green-800", activeColor: "active:bg-green-900"}); break;
-        case "orange": setButtonColor({baseColor: "bg-orange-400", hoverColor: "hover:bg-orange-500", activeColor: "active:bg-orange-600"}); break;
-        case "yellow": setButtonColor({baseColor: "bg-yellow-400", hoverColor: "hover:bg-yellow-500", activeColor: "active:bg-yellow-600"}); break;
-      }
-    } else if (type === "default") {
-      switch (color) {
-        case "blue": setButtonColor({baseColor: "border-[#e0e0e0]", hoverColor: "hover:border-blue-400 hover:text-blue-400", activeColor: "active:border-blue-900 hover:text-blue-900"}); break;
-      }
+const colorSchemes = {
+  blue: {
+    primary: {
+      base: "bg-blue-700",
+      hover: "hover:bg-blue-800",
+      active: "active:bg-blue-900",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-blue-400 hover:text-blue-400",
+      active: "active:border-blue-700 active:text-blue-700",
+    },
+    text: {
+      base: "border-none text-blue-700",
+      hover: "hover:bg-blue-100",
+      active: "active:bg-blue-300",
+    },
+    link: {
+      base: "border-none text-blue-400",
+      hover: "hover:text-blue-600",
+      active: "active:text-blue-900",
     }
-  }, [type, color]);
+  },
+  red: {
+    primary: {
+      base: "bg-red-700",
+      hover: "hover:bg-red-800",
+      active: "active:bg-red-900",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-red-400 hover:text-red-400",
+      active: "active:border-red-700 active:text-red-700",
+    },
+    text: {
+      base: "border-none text-red-700",
+      hover: "hover:bg-red-100",
+      active: "active:bg-red-300",
+    },
+    link: {
+      base: "border-none text-red-400",
+      hover: "hover:text-red-600",
+      active: "active:text-red-900",
+    }
+  },
+  green: {
+    primary: {
+      base: "bg-green-700",
+      hover: "hover:bg-green-800",
+      active: "active:bg-green-900",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-green-400 hover:text-green-400",
+      active: "active:border-green-700 active:text-green-700",
+    },
+    text: {
+      base: "border-none text-green-700",
+      hover: "hover:bg-green-100",
+      active: "active:bg-green-300",
+    },
+    link: {
+      base: "border-none text-green-400",
+      hover: "hover:text-green-600",
+      active: "active:text-green-900",
+    }
+  },
+  orange: {
+    primary: {
+      base: "bg-orange-400",
+      hover: "hover:bg-orange-500",
+      active: "active:bg-orange-600",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-orange-400 hover:text-orange-400",
+      active: "active:border-orange-700 active:text-orange-700",
+    },
+    text: {
+      base: "border-none text-orange-400",
+      hover: "hover:bg-orange-100",
+      active: "active:bg-orange-200",
+    },
+    link: {
+      base: "border-none text-orange-400",
+      hover: "hover:text-orange-500",
+      active: "active:text-orange-900",
+    }
+  },
+  yellow: {
+    primary: {
+      base: "bg-yellow-400",
+      hover: "hover:bg-yellow-500",
+      active: "active:bg-yellow-600",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-yellow-400 hover:text-yellow-400",
+      active: "active:border-yellow-700 active:text-yellow-700",
+    },
+    text: {
+      base: "border-none text-yellow-400",
+      hover: "hover:bg-yellow-100",
+      active: "active:bg-yellow-200",
+    },
+    link: {
+      base: "border-none text-yellow-400",
+      hover: "hover:text-yellow-500",
+      active: "active:text-yellow-600",
+    }
+  },
+};
+
+const sizes = {
+  sm: "px-2 py-1 text-sm",
+  md: "px-3 py-2 text-base",
+  lg: "px-4 py-3 text-lg",
+};
+
+const Button = ({
+    htmlType = "button",
+    type = "default",
+    size = "md",
+    color = "blue",
+    icon = null,
+    iconPosition = "start",
+    children,
+    ...otherProps
+  }) => {
+  const IconComponent = icon && LucideIcons[icon] ? LucideIcons[icon] : null;
+  const colorSet = colorSchemes[color]?.[type === "dashed" ? "default" : type] || colorSchemes.blue.default;
+  const dashedClass = type === "dashed" ? "border-dashed" : "";
 
   return (
     <button
-      className={`
-        px-3 py-1 rounded-sm cursor-pointer transition-colors ease-in-out ${type === "primary" ? "text-white" : "border-1 text-black"}
-        ${buttonColor.baseColor} ${buttonColor.hoverColor} ${buttonColor.activeColor}
-      `}
       type={htmlType}
+      className={`flex items-center justify-center gap-2 rounded-md font-medium cursor-pointer transition-colors duration-300 ease-in-out
+        ${sizes[size] || sizes.md}
+        ${type === "primary" ? "text-white" : "border text-black"}
+        ${colorSet.base} ${colorSet.hover} ${colorSet.active} ${dashedClass}`}
+      {...otherProps}
     >
+      {IconComponent && iconPosition === "start" && (
+        <IconComponent size={size === "lg" ? 30 : size === "sm" ? 15 : 20} />
+      )}
       {children}
+      {IconComponent && iconPosition === "end" && (
+        <IconComponent size={size === "lg" ? 30 : size === "sm" ? 15 : 20} />
+      )}
     </button>
   );
 };
