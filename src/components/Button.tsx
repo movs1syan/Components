@@ -1,4 +1,6 @@
+import React from "react";
 import * as LucideIcons from "lucide-react";
+import { LucideProps } from 'lucide-react';
 
 const colorSchemes = {
   blue: {
@@ -119,17 +121,28 @@ const sizes = {
   lg: "px-4 py-3 text-lg",
 };
 
-const Button = ({
-    htmlType = "button",
-    type = "default",
-    size = "md",
-    color = "blue",
-    icon = null,
-    iconPosition = "start",
-    children,
-    ...otherProps
-  }) => {
-  const IconComponent = icon && LucideIcons[icon] ? LucideIcons[icon] : null;
+type LucideIconName = keyof typeof LucideIcons;
+
+interface Props {
+  htmlType?: "button" | "submit" | "reset";
+  type?: "primary" | "default" | "dashed" | "text" | "link";
+  size?: "sm" | "md" | "lg";
+  color?: "blue" | "red" | "green" | "yellow" | "orange";
+  icon?: LucideIconName;
+  iconPosition?: "start" | "end";
+  children?: React.ReactNode;
+}
+
+const Button: React.FC<Props> = ({
+  htmlType = "button",
+  type = "default",
+  size = "md",
+  color = "blue",
+  icon,
+  iconPosition = "start",
+  children,
+}) => {
+  const IconComponent = icon ? (LucideIcons[icon] as React.ComponentType<LucideProps>) : null;
   const colorSet = colorSchemes[color]?.[type === "dashed" ? "default" : type] || colorSchemes.blue.default;
   const dashedClass = type === "dashed" ? "border-dashed" : "";
 
@@ -140,7 +153,6 @@ const Button = ({
         ${sizes[size] || sizes.md}
         ${type === "primary" ? "text-white" : "border text-black"}
         ${colorSet.base} ${colorSet.hover} ${colorSet.active} ${dashedClass}`}
-      {...otherProps}
     >
       {IconComponent && iconPosition === "start" && (
         <IconComponent size={size === "lg" ? 30 : size === "sm" ? 15 : 20} />
