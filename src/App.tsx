@@ -1,4 +1,5 @@
-import Tab from "./components/Tab";
+// import Tab from "./components/Tab";
+import { useNotification } from "./components/NotificationProvider";
 
 const App = () => {
   // DROPDOWN ----------------------------
@@ -63,27 +64,39 @@ const App = () => {
 //   ];
 
   // TAB --------------------------------
-  const items = [
-    {
-      key: '1',
-      label: 'Tab 1',
-      content: 'Content of Tab Pane 1',
-    },
-    {
-      key: '2',
-      label: 'Tab 2',
-      content: 'Content of Tab Pane 2',
-    },
-    {
-      key: '3',
-      label: 'Tab 3',
-      content: 'Content of Tab Pane 3',
-    },
-  ];
-
+  // const items = [
+  //   {
+  //     key: '1',
+  //     label: 'Tab 1',
+  //     content: 'Content of Tab Pane 1',
+  //   },
+  //   {
+  //     key: '2',
+  //     label: 'Tab 2',
+  //     content: 'Content of Tab Pane 2',
+  //   },
+  //   {
+  //     key: '3',
+  //     label: 'Tab 3',
+  //     content: 'Content of Tab Pane 3',
+  //   },
+  // ];
+  const { open } = useNotification();
+  const handleNotify = () => {
+    open({
+      message: "Success!",
+      description: "Your action was completed successfully.",
+      type: "success",
+    });
+  };
   return (
-    <div className="mt-20">
-      <Tab tabs={items} />
+    <div className="h-screen flex items-center justify-center">
+      <button
+        onClick={handleNotify}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        Show Notification
+      </button>
     </div>
   );
 };
