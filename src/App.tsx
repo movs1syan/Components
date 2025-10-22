@@ -1,6 +1,7 @@
 // import Tab from "./components/Tab";
-import { useNotification } from "./components/NotificationProvider";
-import Button from "./components/Button";
+// import { useNotification } from "./components/NotificationProvider";
+// import Button from "./components/Button";
+import Spinner from "./components/Spinner";
 
 const App = () => {
   // DROPDOWN ----------------------------
@@ -82,19 +83,29 @@ const App = () => {
   //     content: 'Content of Tab Pane 3',
   //   },
   // ];
-  const { show } = useNotification();
-  const handleNotify = () => {
-    show({
-      message: "Success!",
-      description: "Your action was completed successfully.",
-      type: "success",
-    });
-  };
+
+
+
+  // NOTIFICATION -----------------------------
+  // const { show } = useNotification();
+  // const handleNotify = () => {
+  //   show({
+  //     message: "Success!",
+  //     description: "Your action was completed successfully.",
+  //     type: "success",
+  //   });
+  // };
+
+
+
   return (
     <div className="h-screen flex items-center justify-center">
-      <Button type="primary" icon="MessageCircle" onClick={handleNotify}>
-        Show notification
-      </Button>
+      {/* NOTIFICATION */}
+      {/*<Button type="primary" icon="MessageCircle" onClick={handleNotify}>*/}
+      {/*  Show notification*/}
+      {/*</Button>*/}
+
+      <Spinner size="large" tip="Loading data..." />
     </div>
   );
 };
