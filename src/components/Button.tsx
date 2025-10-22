@@ -131,6 +131,7 @@ interface Props {
   icon?: LucideIconName;
   iconPosition?: "start" | "end";
   children?: React.ReactNode;
+  onClick?: () => void;
 }
 
 const Button: React.FC<Props> = ({
@@ -141,6 +142,7 @@ const Button: React.FC<Props> = ({
   icon,
   iconPosition = "start",
   children,
+  onClick = () => {}
 }) => {
   const IconComponent = icon ? (LucideIcons[icon] as React.ComponentType<LucideProps>) : null;
   const colorSet = colorSchemes[color]?.[type === "dashed" ? "default" : type] || colorSchemes.blue.default;
@@ -149,6 +151,7 @@ const Button: React.FC<Props> = ({
   return (
     <button
       type={htmlType}
+      onClick={onClick}
       className={`flex items-center justify-center gap-2 rounded-md font-medium cursor-pointer transition-colors duration-300 ease-in-out
         ${sizes[size] || sizes.md}
         ${type === "primary" ? "text-white" : "border text-black"}

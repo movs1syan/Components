@@ -1,5 +1,6 @@
 // import Tab from "./components/Tab";
 import { useNotification } from "./components/NotificationProvider";
+import Button from "./components/Button";
 
 const App = () => {
   // DROPDOWN ----------------------------
@@ -81,9 +82,9 @@ const App = () => {
   //     content: 'Content of Tab Pane 3',
   //   },
   // ];
-  const { open } = useNotification();
+  const { show } = useNotification();
   const handleNotify = () => {
-    open({
+    show({
       message: "Success!",
       description: "Your action was completed successfully.",
       type: "success",
@@ -91,12 +92,9 @@ const App = () => {
   };
   return (
     <div className="h-screen flex items-center justify-center">
-      <button
-        onClick={handleNotify}
-        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        Show Notification
-      </button>
+      <Button type="primary" icon="MessageCircle" onClick={handleNotify}>
+        Show notification
+      </Button>
     </div>
   );
 };

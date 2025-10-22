@@ -11,7 +11,7 @@ interface Notification {
 }
 
 interface NotificationContextType {
-  open: (notification: Omit<Notification, "id">) => void;
+  show: (notification: Omit<Notification, "id">) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | null>(null);
@@ -27,7 +27,7 @@ export const useNotification = () => {
 export const NotificationProvider: React.FC<{ children:React.ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const open = (notification: Omit<Notification, "id"> ) => {
+  const show = (notification: Omit<Notification, "id">) => {
     const id = uuid();
     setNotifications((prev) => [...prev, {...notification, id}]);
 
@@ -36,12 +36,12 @@ export const NotificationProvider: React.FC<{ children:React.ReactNode }> = ({ c
     }, 3000);
   };
 
-  const remove = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  const hide = (id: string) => {
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id));
   };
 
   return (
-    <NotificationContext.Provider value={{ open }}>
+    <NotificationContext.Provider value={{ show }}>
       {children}
 
       <style>{`
@@ -56,21 +56,21 @@ export const NotificationProvider: React.FC<{ children:React.ReactNode }> = ({ c
       `}</style>
 
       {/* Notification container */}
-      <div className="fixed top-4 right-4 flex flex-col gap-2 z-50">
-        {notifications.map((n) => (
+      <div className="fixed top-4 right-4 flex flex-col gap-2 z-10">
+        {notifications.map((notification) => (
           <div
-            key={n.id}
+            key={notification.id}
             className={`relative w-80 p-4 rounded-xl shadow-lg text-white animate-[slideInRight_0.4s_ease_forwards]
-              ${n.type === "success" ? "bg-green-500"
-              : n.type === "error" ? "bg-red-500"
-                : n.type === "warning" ? "bg-yellow-500"
-                  : "bg-blue-500"}
+              ${notification.type === "success" ? "bg-green-500"
+                : notification.type === "error" ? "bg-red-500" 
+                : notification.type === "warning" ? "bg-yellow-500"
+                : "bg-blue-500"}
             `}
           >
-            <div className="font-semibold">{n.message}</div>
-            {n.description && <div className="text-sm opacity-90">{n.description}</div>}
+            <div className="font-semibold">{notification.message}</div>
+            {notification.description && <div className="text-sm opacity-90">{notification.description}</div>}
             <button
-              onClick={() => remove(n.id)}
+              onClick={() => hide(notification.id)}
               className="absolute top-2 right-4 text-white opacity-70 hover:opacity-100 cursor-pointer"
             >
               ✕
