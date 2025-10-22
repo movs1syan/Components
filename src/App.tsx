@@ -4,7 +4,7 @@
 // import Spinner from "./components/Spinner";
 // import Drawer from "./components/Drawer";
 // import {useState} from "react";
-// import Button from "./components/Button";
+// import Modal from "./components/Modal";
 
 const App = () => {
   // DROPDOWN ----------------------------
@@ -101,7 +101,7 @@ const App = () => {
 
 
   // DRAWER
-  // const [open, setOpen] = useState(false);
+  //  const [open, setOpen] = useState(false);
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -117,7 +117,6 @@ const App = () => {
       {/*<Button type="primary" icon="Menu" iconPosition="end" onClick={() => setOpen(true)}>*/}
       {/*  Open Drawer*/}
       {/*</Button>*/}
-
       {/*<Drawer*/}
       {/*  open={open}*/}
       {/*  onClose={() => setOpen(false)}*/}
@@ -128,6 +127,19 @@ const App = () => {
       {/*  <p className="text-gray-700">This is the drawer content.</p>*/}
       {/*</Drawer>*/}
 
+      {/* MODAL */}
+      {/*<Button type="primary" icon="AppWindowIcon" onClick={() => setOpen(true)}>*/}
+      {/*  Open Modal*/}
+      {/*</Button>*/}
+      {/*<Modal*/}
+      {/*  open={open}*/}
+      {/*  onClose={() => setOpen(false)}*/}
+      {/*  title="Basic Modal"*/}
+      {/*>*/}
+      {/*  <p>Some contents...</p>*/}
+      {/*  <p>Some contents...</p>*/}
+      {/*  <p>Some contents...</p>*/}
+      {/*</Modal>*/}
 
     </div>
   );

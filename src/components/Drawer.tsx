@@ -67,12 +67,7 @@ const Drawer: React.FC<DrawerProps> = ({
       `}</style>
 
       {/* Overlay */}
-      <div
-        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
-        onClick={onClose}
-      ></div>
+      <div className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`} onClick={onClose}></div>
 
       {/* Drawer */}
       <div
@@ -95,7 +90,7 @@ const Drawer: React.FC<DrawerProps> = ({
           <h3 className="text-lg font-semibold">{title}</h3>
           <button
             onClick={onClose}
-            className="font-bold text-gray-500 px-1.5 hover:text-gray-800 hover:bg-gray-300 transition cursor-pointer"
+            className="font-bold text-gray-500 px-1.5 hover:text-black hover:bg-gray-300 transition cursor-pointer"
           >
             ✕
           </button>
