@@ -1,7 +1,10 @@
 // import Tab from "./components/Tab";
 // import { useNotification } from "./components/NotificationProvider";
 // import Button from "./components/Button";
-import Spinner from "./components/Spinner";
+// import Spinner from "./components/Spinner";
+// import Drawer from "./components/Drawer";
+// import {useState} from "react";
+// import Button from "./components/Button";
 
 const App = () => {
   // DROPDOWN ----------------------------
@@ -97,6 +100,8 @@ const App = () => {
   // };
 
 
+  // DRAWER
+  // const [open, setOpen] = useState(false);
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -105,7 +110,25 @@ const App = () => {
       {/*  Show notification*/}
       {/*</Button>*/}
 
-      <Spinner size="large" tip="Loading data..." />
+      {/* SPINNER */}
+      {/*<Spinner size="large" tip="Loading data..." />*/}
+
+      {/* DRAWER */}
+      {/*<Button type="primary" icon="Menu" iconPosition="end" onClick={() => setOpen(true)}>*/}
+      {/*  Open Drawer*/}
+      {/*</Button>*/}
+
+      {/*<Drawer*/}
+      {/*  open={open}*/}
+      {/*  onClose={() => setOpen(false)}*/}
+      {/*  title="Menu"*/}
+      {/*  placement="right"*/}
+      {/*  width="400px"*/}
+      {/*>*/}
+      {/*  <p className="text-gray-700">This is the drawer content.</p>*/}
+      {/*</Drawer>*/}
+
+
     </div>
   );
 };
