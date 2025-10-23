@@ -26,6 +26,7 @@ const Dropdown: React.FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (trigger === "click") {
@@ -42,8 +43,18 @@ const Dropdown: React.FC<Props> = ({
     }
   }, [trigger]);
 
-  const handleMouseEnter = () => trigger === "hover" && setOpen(true);
-  const handleMouseLeave = () => trigger === "hover" && setTimeout(() => setOpen(false), 500);
+  const handleMouseEnter = () => {
+    if (trigger === "hover") {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      setOpen(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (trigger === "hover") {
+      timeoutRef.current = setTimeout(() => setOpen(false), 150);
+    }
+  };
   const handleClick = () => trigger === "click" && setOpen((prev) => !prev);
 
   const placementClasses =
@@ -52,7 +63,7 @@ const Dropdown: React.FC<Props> = ({
     placement === "top" ? "bottom-full left-1/2 -translate-x-1/2 origin-bottom" :
     placement === "topLeft" ? "left-0 bottom-full origin-bottom" :
     placement === "topRight" ? "right-0 bottom-full origin-bottom" :
-    "top-full left-1/2 -translate-x-1/2 origin-top mt-2";
+    "top-full left-1/2 -translate-x-1/2 origin-top";
 
   const arrowClasses = arrow
     ? `
