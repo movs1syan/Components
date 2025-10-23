@@ -1,27 +1,48 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-const Form = ({ initialValues = {}, rules = {}, onFinish, onFinishFailed, children }) => {
-  const [values, setValues] = useState(initialValues);
+type FieldType = { required: boolean, message: string } | { min: number, message: string };
+
+type InitialValuesType = {
+  username: string, password: string, remember: boolean
+};
+
+type RulesType = Record<string, FieldType[]>;
+
+interface FormProps {
+  initialValues?: InitialValuesType;
+  rules?: RulesType;
+  onFinish?: (values: InitialValuesType) => void;
+  onFinishFailed?: (errors: Record<string, string>) => void;
+  children: (props: {
+    values: InitialValuesType;
+    errors: Record<string, string>;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  }) => React.ReactNode;
+}
+
+const Form: React.FC<FormProps> = ({ initialValues = { username: "", password: "", remember: false }, rules = {}, onFinish, onFinishFailed, children }) => {
+  const [values, setValues] = useState<InitialValuesType>(initialValues);
   const [errors, setErrors] = useState({});
 
   // Handle input change
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setValues({ ...values, [name]: type === "checkbox" ? checked : value });
   };
 
   // Validation function
   const validate = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     for (const field in rules) {
       const fieldRules = rules[field];
-      const value = values[field];
+      const value = (values as any)[field];
       for (const rule of fieldRules) {
-        if (rule.required && !value) {
+        if ("required" in rule && !value) {
           newErrors[field] = rule.message;
           break;
         }
-        if (rule.min && value.length < rule.min) {
+        if ("min" in rule && value.length < rule.min) {
           newErrors[field] = rule.message;
           break;
         }
@@ -32,7 +53,7 @@ const Form = ({ initialValues = {}, rules = {}, onFinish, onFinishFailed, childr
   };
 
   // Submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
       onFinish?.(values);
