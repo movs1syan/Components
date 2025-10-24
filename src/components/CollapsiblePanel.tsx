@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 
 interface ItemProps {
   key: string;
@@ -26,6 +26,7 @@ const CollapsiblePanel: React.FC<PanelProps> = ({ items, defaultActiveKeys = [] 
     <div className="border border-gray-300 rounded-md overflow-hidden shadow-sm min-w-100 w-fit">
       {items.map(item => {
         const isOpen = activeKeys.includes(item.key);
+        const contentRef = useRef<HTMLDivElement>(null);
 
         return (
           <div key={item.key}>
@@ -33,21 +34,27 @@ const CollapsiblePanel: React.FC<PanelProps> = ({ items, defaultActiveKeys = [] 
               onClick={() => togglePanel(item.key)}
               className="w-full flex justify-start items-center gap-4 cursor-pointer px-4 py-3 border-b border-t border-[#e0e0e0] bg-gray-100 transition"
             >
-            <span
-              className={`transform transition-transform -rotate-90 ${
-                isOpen ? "rotate-0" : ""
-              }`}
-            >
-              <img src="/public/arrow.png" alt="arrow down" className="h-4 w-4"/>
-            </span>
+              <span
+                className={`transform transition-transform -rotate-90 ${
+                  isOpen ? "rotate-0" : ""
+                }`}
+              >
+                <img src="/public/arrow.png" alt="arrow down" className="h-4 w-4"/>
+              </span>
               <span>{item.label}</span>
             </button>
 
-            <div className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${isOpen ? "max-h-40" : "max-h-0"}`}>
-              <div className="p-4 text-gray-600 bg-white">{item.children}</div>
+            <div
+              ref={contentRef}
+              style={{
+                maxHeight: isOpen ? `${contentRef.current?.scrollHeight}px` : "0",
+              }}
+              className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${isOpen ? "max-h-40" : "max-h-0"}`}
+            >
+                <div className="p-4 text-gray-600 bg-white">{item.children}</div>
             </div>
           </div>
-          )
+        )
       })}
     </div>
   );

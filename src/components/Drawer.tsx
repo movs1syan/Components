@@ -21,15 +21,6 @@ const Drawer: React.FC<DrawerProps> = ({
   const [isMounted, setIsMounted] = useState(open);
   const [isVisible, setIsVisible] = useState(false);
 
-  const portalRoot =
-    document.getElementById("drawer-root") ||
-    (() => {
-      const el = document.createElement("div");
-      el.id = "drawer-root";
-      document.body.appendChild(el);
-      return el;
-    })();
-
   useEffect(() => {
     if (open) {
       setIsMounted(true);
@@ -47,24 +38,6 @@ const Drawer: React.FC<DrawerProps> = ({
 
   return createPortal(
     <div className="fixed inset-0 z-10">
-      <style>{`
-        @keyframes slideInRight {
-          0% { opacity: 0; transform: translateX(100%); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideOutRight {
-          0% { opacity: 1; transform: translateX(0); }
-          100% { opacity: 0; transform: translateX(100%); }
-        }
-        @keyframes slideInLeft {
-          0% { opacity: 0; transform: translateX(-100%); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideOutLeft {
-          0% { opacity: 1; transform: translateX(0); }
-          100% { opacity: 0; transform: translateX(-100%); }
-        }
-      `}</style>
 
       {/* Overlay */}
       <div className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`} onClick={onClose}></div>
@@ -100,7 +73,7 @@ const Drawer: React.FC<DrawerProps> = ({
         <div className="py-4 px-6 overflow-y-auto h-[calc(100%-61px)]">{children}</div>
       </div>
     </div>,
-    portalRoot
+    document.body
   );
 };
 

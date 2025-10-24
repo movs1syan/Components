@@ -14,11 +14,10 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = ({ tabs, defaultActiveKey }) => {
   const [activeKey, setActiveKey] = useState(defaultActiveKey || tabs[0].key);
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const tabRefs = useRef<Record<string, (HTMLButtonElement | null)>>({});
 
   useEffect(() => {
-    const index = tabs.findIndex((tab) => tab.key === activeKey);
-    const currentTab = tabRefs.current[index];
+    const currentTab = tabRefs.current[activeKey];
     if (currentTab) {
       setIndicatorStyle({
         width: currentTab.offsetWidth,
@@ -34,7 +33,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, defaultActiveKey }) => {
         {tabs.map((tab, index) => (
           <button
             key={tab.key}
-            ref={(el) => { tabRefs.current[index] = el }}
+            ref={(el) => { tabRefs.current[tab.key] = el }}
             onClick={() => setActiveKey(tab.key)}
             className={`px-4 py-2 font-medium transition-colors duration-300 cursor-pointer ${
               activeKey === tab.key ? "text-blue-600" : "text-gray-600"
@@ -56,11 +55,8 @@ const Tabs: React.FC<TabsProps> = ({ tabs, defaultActiveKey }) => {
         {tabs.map((tab) => (
           <div
             key={tab.key}
-            className={`absolute top-0 left-0 w-full transition-opacity duration-300 ${
-              activeKey === tab.key ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
           >
-            {tab.content}
+            {activeKey === tab.key && tab.content}
           </div>
         ))}
       </div>

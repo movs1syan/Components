@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
-import type { ReactElement } from "react";
+import React, { useState, useRef } from "react";
 
 interface DropdownItem {
   key: string;
@@ -10,7 +9,7 @@ interface DropdownItem {
 }
 
 interface Props {
-  menu?: DropdownItem[];
+  menu: DropdownItem[];
   trigger?: "hover" | "click";
   placement?: "bottom" | "bottomLeft" | "bottomRight" | "top" | "topLeft" | "topRight";
   arrow?: boolean;
@@ -26,36 +25,23 @@ const Dropdown: React.FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (trigger === "click") {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          dropdownRef.current &&
-          !dropdownRef.current.contains(event.target as Node)
-        ) {
-          setOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [trigger]);
+  const handleMouseEnter = () => setOpen(true);
+  const handleMouseLeave = () => setOpen(false);
+  const handleClick = () => setOpen((prev) => !prev);
 
-  const handleMouseEnter = () => {
-    if (trigger === "hover") {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      setOpen(true);
-    }
+  const eventProps: React.HTMLAttributes<HTMLDivElement> = {};
+
+  if (trigger === "hover") {
+    eventProps.onMouseEnter = handleMouseEnter;
+    eventProps.onMouseLeave = handleMouseLeave;
+  } else {
+    eventProps.onClick = handleClick;
+  }
+
+  const handleClickOutside = () => {
+    if (dropdownRef.current) setOpen(false);
   };
-
-  const handleMouseLeave = () => {
-    if (trigger === "hover") {
-      timeoutRef.current = setTimeout(() => setOpen(false), 150);
-    }
-  };
-  const handleClick = () => trigger === "click" && setOpen((prev) => !prev);
 
   const placementClasses =
     placement === "bottomLeft" ? "left-0 top-full origin-top" :
@@ -71,68 +57,73 @@ const Dropdown: React.FC<Props> = ({
     ${placement.startsWith("bottom") ? "after:top-0 after:-translate-y-2" : ""}
     ${placement.startsWith("top") ? "after:bottom-0 after:translate-y-2" : ""}
     
-    ${placement === "bottom" ? "after:left-1/2 after:-translate-x-1/2 mt-2 after:border-t after:border-l after:border-gray-200" : ""}
-    ${placement === "bottomLeft" ? "after:left-1/8 after:-translate-x-1/2 mt-2 after:border-t after:border-l after:border-gray-200" : ""}
-    ${placement === "bottomRight" ? "after:right-1/8 after:-translate-x-1/2 mt-2 after:border-t after:border-l after:border-gray-200" : ""}
+    ${placement === "bottom" ? "after:left-1/2 after:-translate-x-1/2 after:border-t after:border-l after:border-gray-200" : ""}
+    ${placement === "bottomLeft" ? "after:left-1/8 after:-translate-x-1/2 after:border-t after:border-l after:border-gray-200" : ""}
+    ${placement === "bottomRight" ? "after:right-1/8 after:-translate-x-1/2 after:border-t after:border-l after:border-gray-200" : ""}
 
-    ${placement === "top" ? "after:left-1/2 after:-translate-x-1/2 mb-2 after:border-b after:border-r after:border-gray-200" : ""}
-    ${placement === "topLeft" ? "after:left-1/8 after:-translate-x-1/2 mb-2 after:border-b after:border-r after:border-gray-200" : ""}
-    ${placement === "topRight" ? "after:right-1/8 after:-translate-x-1/2 mb-2 after:border-b after:border-r after:border-gray-200" : ""}
+    ${placement === "top" ? "after:left-1/2 after:-translate-x-1/2 after:border-b after:border-r after:border-gray-200" : ""}
+    ${placement === "topLeft" ? "after:left-1/8 after:-translate-x-1/2 after:border-b after:border-r after:border-gray-200" : ""}
+    ${placement === "topRight" ? "after:right-1/8 after:-translate-x-1/2 after:border-b after:border-r after:border-gray-200" : ""}
   `
     : "";
 
   return (
+    <>
     <div
       ref={dropdownRef}
       className="relative inline-block"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
+      {...eventProps}
     >
-      <div className={`cursor-pointer transition-all duration-200 ease-out text-blue-700 ${trigger === "click" ? "active:opacity-70" : "hover:opacity-70"}`}>
+      <div className="cursor-pointer transition-all duration-200 ease-out text-blue-700">
         {children}
       </div>
 
+      {trigger === "hover" && open && (
+        <div className={`absolute left-0 right-0 h-3 ${placement.startsWith("bottom") ? "top-full" : "bottom-full"} bg-transparent`} />
+      )}
+
+      {/* Dropdown menu */}
       <div
         className={`
-          absolute min-w-56 p-2 bg-white shadow-md rounded-md ring-1 ring-gray-200 backdrop-blur-sm transform transition-all duration-200 ease-out
-          ${open ? "opacity-100 scale-100 translate-y-0 pointer-events-auto" : "opacity-0 scale-95 -translate-y-1 pointer-events-none"}
-          ${placementClasses}
-          ${arrowClasses}
-        `}
+        absolute min-w-56 p-2 bg-white shadow-md rounded-md ring-1 ring-gray-200 transform transition-all duration-200 ease-out z-20
+        ${open ? `opacity-100 scale-100 ${placement.startsWith("bottom") ? "translate-y-2" : "-translate-y-2"} pointer-events-auto` : `opacity-0 scale-95 -translate-y-1 pointer-events-none`}
+        ${placementClasses}
+        ${arrowClasses}
+      `}
       >
-        {menu?.map((item) => {
-          const label =
-            item.disabled && React.isValidElement(item.label) && item.label.type === "a"
-              ? React.cloneElement(item.label as ReactElement<HTMLAnchorElement>, {
-                href: undefined,
-                className:
-                  "pointer-events-none text-gray-400 cursor-not-allowed select-none",
-              })
-              : item.label;
-
+        {menu.map((item) => {
+          const isDisabled = !!item.disabled;
           return (
-            <button
+            <div
               key={item.key}
-              type="button"
-              disabled={item.disabled}
               onClick={(e) => {
-                e.stopPropagation();
-                if (!item.disabled) item.onClick?.();
+                if (isDisabled) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                } else {
+                  item.onClick?.();
+                }
               }}
+              aria-disabled={isDisabled}
               className={`
-               w-full text-left px-4 py-2 flex items-center gap-2 rounded-md transition-colors
-                ${item.danger ? "text-red-600 hover:bg-red-600 hover:text-white" : "hover:bg-gray-100"}
-                ${item.disabled ? "opacity-50 cursor-not-allowed hover:bg-transparent" : "cursor-pointer"}
-              `}
+              w-full text-left px-4 py-2 flex items-center gap-2 rounded-md transition-colors
+              ${item.danger ? "text-red-600 hover:bg-red-600 hover:text-white" : "hover:bg-gray-100"}
+              ${item.disabled ? "opacity-50 cursor-not-allowed hover:bg-transparent" : "cursor-pointer"}
+            `}
             >
-              {label}
-            </button>
+              {item.label}
+            </div>
           );
         })}
       </div>
     </div>
+
+    {trigger === "click" && open && (
+      <div onClick={handleClickOutside} className="fixed inset-0 bg-transparent z-10"></div>
+    )}
+    </>
   );
+
 };
 
 export default Dropdown;

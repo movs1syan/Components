@@ -1,109 +1,40 @@
-// import React from "react";
-// import {useState} from "react";
+import React from "react";
+import {useState} from "react";
 import Button from "./components/Button";
-// import Dropdown from "./components/Dropdown"
-// import EmptyState from ".components/EmptyState"
-// import Tab from "./components/Tab";
-// import { useNotification } from "./components/NotificationProvider";
-// import Spinner from "./components/Spinner";
-// import Drawer from "./components/Drawer";
-// import Modal from "./components/Modal";
-// import Form from "./components/Form";
-// import {Eye, EyeOff} from "lucide-react";
+import Dropdown from "./components/Dropdown";
+import { dropdownItems, collapsiblePanelItems, tabItems } from "./datas";
+import EmptyState from "./components/EmptyState";
+import Tab from "./components/Tab";
+import Notification from "./components/Notification";
+import Spinner from "./components/Spinner";
+import Drawer from "./components/Drawer";
+import Modal from "./components/Modal";
+import Form from "./components/Form";
+import {Eye, EyeOff} from "lucide-react";
+import CollapsiblePanel from "./components/CollapsiblePanel";
+import { v4 as uuid } from "uuid";
+import notification from "./components/Notification";
+
 
 const App = () => {
-  // DROPDOWN ----------------------------
-  // const items = [
-  //   {
-  //     key: '1',
-  //     label: (
-  //       <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-  //         1st menu item
-  //       </a>
-  //     ),
-  //   },
-  //   {
-  //     key: '2',
-  //     label: (
-  //       <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-  //         2nd menu item (disabled)
-  //       </a>
-  //     ),
-  //     disabled: true,
-  //   },
-  //   {
-  //     key: '3',
-  //     label: (
-  //       <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-  //         3rd menu item (disabled)
-  //       </a>
-  //     ),
-  //     disabled: true,
-  //   },
-  //   {
-  //     key: '4',
-  //     danger: true,
-  //     label: 'a danger item',
-  //   },
-  // ];
+  // NOTIFICATION --------------
+  const [notifications, setNotifications] = useState([]);
+  const addNotification = () => {
+    const id = uuid();
+    const newItem: NotificationItem = {
+      id,
+      type: "success",
+      message: "Success!",
+      description: "Your action was completed successfully.",
+    };
+    setNotifications((prev) => [...prev, newItem]);
 
+    setTimeout(() => onClose(id), 3000);
+  };
 
-  // COLLAPSE --------------------------
-//   const text = `
-//   A dog is a type of domesticated animal.
-//   Known for its loyalty and faithfulness,
-//   it can be found as a welcome guest in many households across the world.
-// `;
-//
-//   const items = [
-//     {
-//       key: '1',
-//       label: 'This is panel header 1',
-//       children: <p>{text}</p>,
-//     },
-//     {
-//       key: '2',
-//       label: 'This is panel header 2',
-//       children: <p>{text}</p>,
-//     },
-//     {
-//       key: '3',
-//       label: 'This is panel header 3',
-//       children: <p>{text}</p>,
-//     },
-//   ];
-
-  // TAB --------------------------------
-  // const items = [
-  //   {
-  //     key: '1',
-  //     label: 'Tab 1',
-  //     content: 'Content of Tab Pane 1',
-  //   },
-  //   {
-  //     key: '2',
-  //     label: 'Tab 2',
-  //     content: 'Content of Tab Pane 2',
-  //   },
-  //   {
-  //     key: '3',
-  //     label: 'Tab 3',
-  //     content: 'Content of Tab Pane 3',
-  //   },
-  // ];
-
-
-
-  // NOTIFICATION -----------------------------
-  // const { show } = useNotification();
-  // const handleNotify = () => {
-  //   show({
-  //     message: "Success!",
-  //     description: "Your action was completed successfully.",
-  //     type: "success",
-  //   });
-  // };
-
+  const onClose = (id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
 
   // DRAWER
   //  const [open, setOpen] = useState(false);
@@ -112,19 +43,25 @@ const App = () => {
   // const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="h-screen flex items-center justify-center">
-      <Button type="primary" icon="MessageCircle">
-        Show Notifications
-      </Button>
+      {/*<Button type="primary" icon="MessageCircle">*/}
+      {/*  Show Notifications*/}
+      {/*</Button>*/}
 
-      {/* DROPDOWN */}
-      {/*<Dropdown menu={items} placement="bottomLeft" arrow>*/}
+      {/*<Dropdown menu={dropdownItems} placement="top" trigger="click" arrow>*/}
       {/*  Dropdown*/}
       {/*</Dropdown>*/}
 
+      {/*<EmptyState description="Not found" image="/public/arrow.png" />*/}
+
+      {/*<CollapsiblePanel items={collapsiblePanelItems} />*/}
+
+      {/*<Tab tabs={tabItems} />*/}
+
       {/* NOTIFICATION */}
-      {/*<Button type="primary" icon="MessageCircle" onClick={handleNotify}>*/}
-      {/*  Show notification*/}
-      {/*</Button>*/}
+      <Button color="green" icon="MessageCircle" onClick={addNotification}>
+        Show notification
+      </Button>
+      <Notification notifications={notifications} onClose={onClose} />
 
       {/* SPINNER */}
       {/*<Spinner size="large" tip="Loading data..." />*/}

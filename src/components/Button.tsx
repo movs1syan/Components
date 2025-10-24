@@ -2,73 +2,117 @@ import React from "react";
 import * as LucideIcons from "lucide-react";
 import { LucideProps } from "lucide-react";
 
-type ShadeOverrides = {
-  primary?: number[];
-  default?: number[];
-  dashed?: number[];
-  text?: number[];
-  link?: number[];
-}
-
-const COMMON_STYLES = {
-  defaultBase: "border border-[#e0e0e0]",
-  dashedBase: "border border-dashed border-[#e0e0e0]",
-  textBase: "border-none",
-  linkBase: "border-none",
-};
-
-const createColorScheme = (color: string, shadeOverrides: ShadeOverrides = {}) => {
-  const shades = {
-    primary: shadeOverrides.primary || [700, 800, 900],
-    default: shadeOverrides.default || [400, 700],
-    dashed: shadeOverrides.dashed || [400, 700],
-    text: shadeOverrides.text || [700, 100, 300],
-    link: shadeOverrides.link || [400, 600, 900],
-  };
-
-  return {
+const colorSchemes = {
+  blue: {
     primary: {
-      base: `bg-${color}-${shades.primary[0]} text-white`,
-      hover: `hover:bg-${color}-${shades.primary[1]}`,
-      active: `active:bg-${color}-${shades.primary[2]}`,
+      base: "bg-blue-700",
+      hover: "hover:bg-blue-800",
+      active: "active:bg-blue-900",
     },
     default: {
-      base: COMMON_STYLES.defaultBase,
-      hover: `hover:border-${color}-${shades.default[0]} hover:text-${color}-${shades.default[0]}`,
-      active: `active:border-${color}-${shades.default[1]} active:text-${color}-${shades.default[1]}`,
-    },
-    dashed: {
-      base: COMMON_STYLES.dashedBase,
-      hover: `hover:border-${color}-${shades.dashed[0]} hover:text-${color}-${shades.dashed[0]}`,
-      active: `active:border-${color}-${shades.dashed[1]} active:text-${color}-${shades.dashed[1]}`,
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-blue-400 hover:text-blue-400",
+      active: "active:border-blue-700 active:text-blue-700",
     },
     text: {
-      base: `${COMMON_STYLES.textBase} text-${color}-${shades.text[0]}`,
-      hover: `hover:bg-${color}-${shades.text[1]}`,
-      active: `active:bg-${color}-${shades.text[2]}`,
+      base: "border-none text-blue-700",
+      hover: "hover:bg-blue-100",
+      active: "active:bg-blue-300",
     },
     link: {
-      base: `${COMMON_STYLES.linkBase} text-${color}-${shades.link[0]}`,
-      hover: `hover:text-${color}-${shades.link[1]}`,
-      active: `active:text-${color}-${shades.link[2]}`,
+      base: "border-none text-blue-400",
+      hover: "hover:text-blue-600",
+      active: "active:text-blue-900",
+    }
+  },
+  red: {
+    primary: {
+      base: "bg-red-700",
+      hover: "hover:bg-red-800",
+      active: "active:bg-red-900",
     },
-  };
-};
-
-const colorSchemes = {
-  blue: createColorScheme("blue"),
-  red: createColorScheme("red"),
-  green: createColorScheme("green"),
-  orange: createColorScheme("orange", {
-    primary: [400, 500, 600],
-    text: [400, 100, 200],
-    link: [400, 500, 900],
-  }),
-  yellow: createColorScheme("yellow", {
-    primary: [400, 500, 600],
-    text: [400, 100, 200],
-    link: [400, 500, 600],
-  }),
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-red-400 hover:text-red-400",
+      active: "active:border-red-700 active:text-red-700",
+    },
+    text: {
+      base: "border-none text-red-700",
+      hover: "hover:bg-red-100",
+      active: "active:bg-red-300",
+    },
+    link: {
+      base: "border-none text-red-400",
+      hover: "hover:text-red-600",
+      active: "active:text-red-900",
+    }
+  },
+  green: {
+    primary: {
+      base: "bg-green-700",
+      hover: "hover:bg-green-800",
+      active: "active:bg-green-900",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-green-400 hover:text-green-400",
+      active: "active:border-green-700 active:text-green-700",
+    },
+    text: {
+      base: "border-none text-green-700",
+      hover: "hover:bg-green-100",
+      active: "active:bg-green-300",
+    },
+    link: {
+      base: "border-none text-green-400",
+      hover: "hover:text-green-600",
+      active: "active:text-green-900",
+    }
+  },
+  orange: {
+    primary: {
+      base: "bg-orange-400",
+      hover: "hover:bg-orange-500",
+      active: "active:bg-orange-600",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-orange-400 hover:text-orange-400",
+      active: "active:border-orange-700 active:text-orange-700",
+    },
+    text: {
+      base: "border-none text-orange-400",
+      hover: "hover:bg-orange-100",
+      active: "active:bg-orange-200",
+    },
+    link: {
+      base: "border-none text-orange-400",
+      hover: "hover:text-orange-500",
+      active: "active:text-orange-900",
+    }
+  },
+  yellow: {
+    primary: {
+      base: "bg-yellow-400",
+      hover: "hover:bg-yellow-500",
+      active: "active:bg-yellow-600",
+    },
+    default: {
+      base: "border-[#e0e0e0]",
+      hover: "hover:border-yellow-400 hover:text-yellow-400",
+      active: "active:border-yellow-700 active:text-yellow-700",
+    },
+    text: {
+      base: "border-none text-yellow-400",
+      hover: "hover:bg-yellow-100",
+      active: "active:bg-yellow-200",
+    },
+    link: {
+      base: "border-none text-yellow-400",
+      hover: "hover:text-yellow-500",
+      active: "active:text-yellow-600",
+    }
+  },
 };
 
 const sizes = {
@@ -85,7 +129,7 @@ const iconSizeMap: Record<"sm" | "md" | "lg", number> = {
 
 type LucideIconName = keyof typeof LucideIcons;
 
-interface Props {
+interface ButtonProps {
   htmlType?: "button" | "submit" | "reset";
   type?: "primary" | "default" | "dashed" | "text" | "link";
   size?: "sm" | "md" | "lg";
@@ -96,7 +140,7 @@ interface Props {
   onClick?: () => void;
 }
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<ButtonProps> = ({
   htmlType = "button",
   type = "default",
   size = "md",
@@ -106,19 +150,18 @@ const Button: React.FC<Props> = ({
   children,
   onClick = () => {},
 }) => {
-  const IconComponent = icon
-    ? (LucideIcons[icon] as React.ComponentType<LucideProps>)
-    : null;
-
-  const colorSet = colorSchemes[color][type];
+  const IconComponent = icon ? (LucideIcons[icon] as React.ComponentType<LucideProps>) : null;
+  const colorSet = colorSchemes[color][type === "dashed" ? "default" : type];
+  const dashedClass = type === "dashed" ? "border-dashed" : "";
 
   return (
     <button
       type={htmlType}
       onClick={onClick}
       className={`flex items-center gap-2 rounded-md font-medium cursor-pointer transition-colors duration-300 ease-in-out text-black
+        ${type === "primary" ? "text-white" : "border text-black"}
         ${sizes[size]}
-        ${colorSet.base} ${colorSet.hover} ${colorSet.active}`}
+        ${colorSet.base} ${colorSet.hover} ${colorSet.active} ${dashedClass}`}
     >
       {IconComponent && (
         <IconComponent className={`${iconPosition === "end" ? "order-1" : ""}`} size={iconSizeMap[size]} />
